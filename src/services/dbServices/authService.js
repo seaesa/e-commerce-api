@@ -1,7 +1,6 @@
 import User from '../../models/user-model.js';
 import HttpError from '../httpErrorService.js';
 import jwt from 'jsonwebtoken';
-import { JWT_TOKEN_SECRET } from '../../config/app.js';
 import Company from '../../models/company-model.js';
 import bcrypt from 'bcrypt';
 
@@ -13,31 +12,31 @@ import bcrypt from 'bcrypt';
  * @throws {HttpError} If there is an error while querying the database or if the provided credentials are invalid.
  */
 const loginLogic = async (email, password) => {
-    let user;
-    let company;
+  let user;
+  let company;
 
-    try {
-        user = await User.findOne({ email });
-    } catch (err) {
-        throw new HttpError(err, 500);
-    }
+  try {
+    user = await User.findOne({ email });
+  } catch (err) {
+    throw new HttpError(err, 500);
+  }
 
-    if (!user) {
-        throw new HttpError('Invalid credentials', 401);
-    }
+  if (!user) {
+    throw new HttpError('Invalid credentials', 401);
+  }
 
-    if (!bcrypt.compareSync(password, user.password)) {
-        throw new HttpError('Invalid credentials', 401);
-    }
+  if (!bcrypt.compareSync(password, user.password)) {
+    throw new HttpError('Invalid credentials', 401);
+  }
 
-    try {
-        company = await Company.findOne();
-    } catch (err) {
-        throw new HttpError(err, 500);
-    }
+  try {
+    company = await Company.findOne();
+  } catch (err) {
+    throw new HttpError(err, 500);
+  }
 
-    const token = jwt.sign({ user }, JWT_TOKEN_SECRET, { expiresIn: '1h' });
-    return { user, company, token };
+  const token = jwt.sign({ user }, process.env.JWT_TOKEN_SECRET, { expiresIn: '1h' });
+  return { user, company, token };
 };
 
 /**
@@ -51,19 +50,19 @@ const loginLogic = async (email, password) => {
  * @throws {HttpError} - If there was an error saving the user to the database.
  */
 const registerLogic = async (data) => {
-    const { name, email, mobile, password } = data;
-    const passwordHash = bcrypt.hashSync(password, 10);
-    const user = new User({
-        name, email, password: passwordHash, mobile
-    });
+  const { name, email, mobile, password } = data;
+  const passwordHash = bcrypt.hashSync(password, 10);
+  const user = new User({
+    name, email, password: passwordHash, mobile
+  });
 
-    try {
-        await user.save();
-    } catch (err) {
-        throw new HttpError(err.message, 500);
-    }
+  try {
+    await user.save();
+  } catch (err) {
+    throw new HttpError(err.message, 500);
+  }
 
-    return user;
+  return user;
 };
 
 export default { loginLogic, registerLogic };

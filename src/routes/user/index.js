@@ -13,7 +13,7 @@ app.use('/', subscriptionRoute);
 app.use('/', commonRoute);
 app.use('/auth', authRoute);
 app.use('/users', userRoute);
-// app.use('/carts', cartRoute);
+app.use('/carts', cartRoute);
 app.use('/shipping-addresses', shippingRoute);
 app.use('/orders', orderRoute);
 app.use('/payments', paymentRoute);
