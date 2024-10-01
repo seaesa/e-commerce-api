@@ -1,0 +1,13 @@
+{
+    "ignorePatterns": [
+        "bin/*",
+        "logs/*",
+        "node_modules/*",
+        "public/*",
+        "package.json",
+        "package-lock.json",
+        "README.md"
+    ],
+    "rules": {
+    }
+}
