@@ -4,15 +4,15 @@ import admin from './routes/admin/index.js';
 import user from './routes/user/index.js';
 import HttpError from './services/httpErrorService.js';
 import fs from 'fs';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import DB from './db/db.js';
 
-
+dotenv.config()
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+console.log(process.env.NODE_ENV)
 app.use(cors());
 
 // Image Upload to local storage
